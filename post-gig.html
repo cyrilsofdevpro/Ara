@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Post a Gig – Ara</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">Ara</div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="store.html">Store</a></li>
+        <li id="authLinks"></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="form-section">
+    <h1>🎯 Post a New Gig</h1>
+    <form id="gigForm">
+      <input type="text" id="title" placeholder="Gig Title" required />
+      <textarea id="description" placeholder="Describe your service..." required></textarea>
+
+      <select id="category" required>
+        <option value="">Select Category</option>
+        <option value="Writing">Writing</option>
+        <option value="Design">Design</option>
+        <option value="Copywriting">📈 Business & Finance</option>
+        <option value="Copywriting">T</option>
+        <option value="Copywriting">Copywriting</option>
+      </select>
+
+      <input type="number" id="price" placeholder="Price in USD" required />
+      <input type="number" id="deliveryTime" placeholder="Delivery Time (days)" required />
+      <input type="number" id="revisions" placeholder="Revisions (e.g., 1)" required />
+
+      <input type="url" id="image" placeholder="Gig Image URL (e.g. Imgur)" required />
+
+      <button type="submit">Submit Gig</button>
+    </form>
+  </section>
+
+  <script>
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    if (!currentUser || currentUser.userType !== "freelancer") {
+      alert("Only freelancers can post gigs.");
+      window.location.href = "login.html";
+    }
+
+    const form = document.getElementById("gigForm");
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const gig = {
+        id: Date.now().toString(),
+        title: document.getElementById("title").value.trim(),
+        description: document.getElementById("description").value.trim(),
+        category: document.getElementById("category").value,
+        price: parseFloat(document.getElementById("price").value),
+        deliveryTime: parseInt(document.getElementById("deliveryTime").value),
+        revisions: parseInt(document.getElementById("revisions").value),
+        image: document.getElementById("image").value.trim(),
+        sellerName: currentUser.fullname,
+        sellerAvatar: currentUser.avatar || "assets/images/default-user.png",
+        sellerId: currentUser.email
+      };
+
+      const gigs = JSON.parse(localStorage.getItem("gigs")) || [];
+      gigs.push(gig);
+      localStorage.setItem("gigs", JSON.stringify(gigs));
+
+      alert("Gig posted successfully!");
+      window.location.href = "services.html";
+    });
+  </script>
+
+</body>
+</html>

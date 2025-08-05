@@ -1,0 +1,145 @@
+/* ========== Responsive Styles ========== */
+@media screen and (max-width: 1024px) {
+  .category-card,
+  .freelancer-card,
+  .store-card,
+  .gig-card {
+    flex: 1 1 calc(33.33% - 1rem);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  /* Hero section */
+  .hero-overlay h1 {
+    font-size: 1.5rem;
+  }
+
+  .hero-overlay .search-bar {
+    font-size: 0.95rem;
+    padding: 8px 12px;
+  }
+
+  /* Top category bar - scrollable on mobile */
+  .top-category-bar {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 10px;
+    background-color: #f9f9f9;
+  }
+
+  .top-category-bar a {
+    margin-right: 15px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  /* Recommendations - stack vertically */
+  .recommendations {
+    flex-direction: column;
+  }
+
+  .rec-card {
+    width: 100%;
+  }
+
+  /* Grids convert to columns */
+  .category-grid,
+  .freelancer-grid,
+  .store-grid,
+  .gig-grid {
+    flex-direction: column;
+  }
+
+  .category-card,
+  .freelancer-card,
+  .store-card,
+  .gig-card {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+
+  /* Navbar adjustments */
+  .navbar nav ul {
+    flex-direction: column;
+    gap: 10px;
+    padding-left: 0;
+  }
+
+  .nav-links li {
+    list-style: none;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .hero-overlay h1 {
+    font-size: 1.2rem;
+  }
+
+  .top-category-bar a {
+    font-size: 0.8rem;
+  }
+
+  .rec-card h4 {
+    font-size: 1rem;
+  }
+}
+
+/* Default: hide hamburger on large screen */
+.menu-toggle {
+  display: none;
+  font-size: 26px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+/* Mobile styles */
+@media screen and (max-width: 768px) {
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: #fff;
+    position: relative;
+    z-index: 1000;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background: #fff;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 15px 20px;
+    z-index: 999;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .nav-links li {
+    margin: 10px 0;
+  }
+
+  .nav-links li a {
+    font-size: 16px;
+    color: #333;
+    text-decoration: none;
+  }
+}
+
+.menu-toggle {
+  display: none;
+  font-size: 26px;
+  cursor: pointer;
+  padding: 10px;
+  color: #000; /* make hamburger icon black */
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ara - Explore Freelancers</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="logo">Ara</div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="store.html">Store</a></li>
+        <li><a href="post-job.html">Post a Job</a></li>
+        <li><a href="login.html" class="btn">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Page Title -->
+  <section class="page-header">
+    <h1>Browse Freelancers</h1>
+    <input type="text" id="searchBox" placeholder="Search by service or freelancer..." class="search-bar">
+  </section>
+
+  <!-- Freelancer Grid -->
+  <section class="freelancer-section">
+    <div class="freelancer-grid" id="freelancerGrid">
+      <!-- Gigs will load here dynamically -->
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 Ara Freelance. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const gigs = JSON.parse(localStorage.getItem('gigs')) || [];
+    const grid = document.getElementById("freelancerGrid");
+    const searchBox = document.getElementById("searchBox");
+
+    function renderGigs(filter = "") {
+      grid.innerHTML = "";
+
+      const filtered = gigs.filter(g =>
+        g.title.toLowerCase().includes(filter.toLowerCase()) ||
+        g.user.toLowerCase().includes(filter.toLowerCase())
+      );
+
+      if (filtered.length === 0) {
+        grid.innerHTML = "<p style='padding:1rem;'>No gigs found.</p>";
+        return;
+      }
+
+      filtered.forEach(gig => {
+        const card = document.createElement("div");
+        card.className = "freelancer-card";
+
+        card.innerHTML = `
+          <img src="${gig.avatar || 'assets/images/default-user.png'}" alt="${gig.user}" />
+          <h4>${gig.user}</h4>
+          <p>${gig.title}</p>
+          <p class="price">Starting at $${gig.price}</p>
+          <button>View Profile</button>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    searchBox.addEventListener("input", e => {
+      renderGigs(e.target.value);
+    });
+
+    renderGigs();
+  </script>
+
+</body>
+</html>

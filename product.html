@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ara Store - Product Details</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="logo">Ara</div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="store.html">Store</a></li>
+        <li><a href="freelancers.html">Freelancers</a></li>
+        <li><a href="login.html" class="btn">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Product Details Section -->
+  <section class="product-detail">
+    <div class="product-container" id="product-container">
+      <div class="product-image">
+        <img id="product-img" src="" alt="Product Image" />
+      </div>
+      <div class="product-info">
+        <h1 id="product-title">Loading...</h1>
+        <p class="price" id="product-price"></p>
+        <p class="description" id="product-desc"></p>
+        <button class="buy-btn" onclick="addToCart()">Buy Now</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 Ara Freelance. All rights reserved.</p>
+  </footer>
+
+  <!-- Product Data -->
+  <script src="assets/js/products.js"></script>
+
+  <!-- Product Display Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const queryParams = new URLSearchParams(window.location.search);
+      const productId = queryParams.get('id');
+
+      if (!productId || !Array.isArray(products)) {
+        document.getElementById("product-container").innerHTML = "<p>Invalid product data.</p>";
+        return;
+      }
+
+      const product = products.find(p => p.id === productId);
+
+      if (product) {
+        document.getElementById('product-title').textContent = product.title ?? "Untitled";
+        document.getElementById('product-price').textContent = product.price ?? "Price not set";
+        document.getElementById('product-desc').textContent = product.description ?? "No description";
+        document.getElementById('product-img').src = product.image ?? "assets/images/default.jpg";
+      } else {
+        document.getElementById("product-container").innerHTML = "<p>Product not found.</p>";
+      }
+
+      window.addToCart = () => {
+        if (!product) return;
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cart.push(product);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        alert("✅ Product added to cart!");
+      };
+    });
+  </script>
+</body>
+</html>

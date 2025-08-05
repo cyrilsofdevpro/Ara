@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login – Ara</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+  <section class="form-section">
+    <h1>Login to Your Account</h1>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+    <p>New user? <a href="register.html">Create an account</a></p>
+  </section>
+
+  <script>
+    const loginForm = document.getElementById('loginForm');
+
+    loginForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const allUsers = JSON.parse(localStorage.getItem('allUsers')) || [];
+
+      const userIndex = users.findIndex(user => user.email === email && user.password === password);
+
+      if (userIndex === -1) {
+        alert("Invalid email or password");
+        return;
+      }
+
+      const user = users[userIndex];
+      user.isLoggedIn = true;
+
+      users[userIndex] = user;
+      localStorage.setItem("users", JSON.stringify(users));
+      localStorage.setItem("currentUser", JSON.stringify(user));
+
+      // Save user to allUsers if not already there (for chat/notification lookup)
+      if (!allUsers.some(u => u.email === user.email)) {
+        allUsers.push({ email: user.email, fullname: user.fullname });
+        localStorage.setItem("allUsers", JSON.stringify(allUsers));
+      }
+
+      alert(`Welcome back, ${user.fullname}!`);
+      window.location.href = "index.html";
+    });
+  </script>
+
+</body>
+</html>

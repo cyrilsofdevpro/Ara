@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Explore Freelance Services – Ara</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="logo">Ara</div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="store.html">Store</a></li>
+        <li><a href="post-gig.html">Post a Gig</a></li>
+        <li id="authLinks"></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Filter & Search Section -->
+  <section class="filter-section">
+    <h1>Explore Freelance Services</h1>
+    <input type="text" id="searchInput" placeholder="Search services..." />
+
+    <div class="filters">
+      <select id="categoryFilter">
+        <option value="">All Categories</option>
+        <option value="Writing">Writing</option>
+        <option value="Design">Design</option>
+        <option value="Copywriting">Copywriting</option>
+      </select>
+
+      <select id="deliveryFilter">
+        <option value="">Any Delivery Time</option>
+        <option value="1">1 Day</option>
+        <option value="3">3 Days</option>
+        <option value="7">7 Days</option>
+      </select>
+
+      <input type="number" id="minPrice" placeholder="Min $" />
+      <input type="number" id="maxPrice" placeholder="Max $" />
+      <button onclick="filterGigs()">Apply</button>
+    </div>
+  </section>
+
+  <!-- Gig Listings -->
+  <section class="gig-listings">
+    <div id="gigGrid" class="gig-grid"></div>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2025 Ara Freelance. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const gigs = JSON.parse(localStorage.getItem("gigs")) || [];
+
+    function displayGigs(list) {
+      const container = document.getElementById("gigGrid");
+      container.innerHTML = "";
+
+      if (list.length === 0) {
+        container.innerHTML = "<p>No gigs found.</p>";
+        return;
+      }
+
+      list.forEach(gig => {
+        container.innerHTML += `
+          <div class="gig-card">
+            <img src="${gig.image || 'assets/images/default-gig.jpg'}" alt="Gig Image" />
+            <h3>${gig.title}</h3>
+            <p>${gig.category} • ${gig.deliveryTime} day(s)</p>
+            <p><strong>$${gig.price}</strong></p>
+            <div class="seller-info">
+              <img src="${gig.sellerAvatar || 'assets/images/default-user.png'}" alt="Seller" />
+              <span>${gig.sellerName}</span>
+            </div>
+            <a href="gig.html?id=${gig.id}" class="btn">View</a>
+          </div>
+        `;
+      });
+    }
+
+    function filterGigs() {
+      const search = document.getElementById("searchInput").value.toLowerCase();
+      const category = document.getElementById("categoryFilter").value;
+      const delivery = document.getElementById("deliveryFilter").value;
+      const min = parseFloat(document.getElementById("minPrice").value) || 0;
+      const max = parseFloat(document.getElementById("maxPrice").value) || Infinity;
+
+      const filtered = gigs.filter(gig => {
+        return (
+          (gig.title.toLowerCase().includes(search) || gig.category.toLowerCase().includes(search)) &&
+          (!category || gig.category === category) &&
+          (!delivery || parseInt(gig.deliveryTime) <= parseInt(delivery)) &&
+          (gig.price >= min && gig.price <= max)
+        );
+      });
+
+      displayGigs(filtered);
+    }
+
+    window.onload = () => {
+      displayGigs(gigs);
+    };
+  </script>
+
+</body>
+</html>

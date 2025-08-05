@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gig Details – Ara</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: #222;
+      color: #fff;
+    }
+
+    .navbar .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .gig-container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      display: flex;
+      gap: 30px;
+      padding: 1.5rem;
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .gig-image {
+      width: 350px;
+      height: auto;
+      max-height: 450px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid #ddd;
+    }
+
+    .gig-info {
+      flex: 1;
+    }
+
+    .gig-info h1 {
+      margin-top: 0;
+    }
+
+    .gig-info p {
+      margin: 6px 0;
+    }
+
+    .seller-box {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-top: 20px;
+      border-top: 1px solid #ccc;
+      padding-top: 15px;
+    }
+
+    .seller-box img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .seller-box div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .seller-box button {
+      margin-top: 8px;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 5px;
+      background: #28a745;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .seller-box button:hover {
+      background: #218838;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 1rem;
+      background: #222;
+      color: #fff;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="logo"><a href="index.html" style="color: #fff; text-decoration: none;">Ara</a></div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="store.html">Store</a></li>
+        <li id="authLinks"></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Gig Detail Section -->
+  <section class="gig-detail">
+    <div class="gig-container">
+      <img id="gig-image" class="gig-image" src="" alt="Gig Image" />
+      <div class="gig-info">
+        <h1 id="gig-title">Loading...</h1>
+        <p><strong>Category:</strong> <span id="gig-category"></span></p>
+        <p><strong>Price:</strong> $<span id="gig-price"></span></p>
+        <p><strong>Delivery Time:</strong> <span id="gig-delivery"></span> day(s)</p>
+        <p><strong>Revisions:</strong> <span id="gig-revisions"></span></p>
+        <p id="gig-description"></p>
+
+        <div class="seller-box">
+          <img id="seller-avatar" src="assets/images/default-user.png" alt="Seller" />
+          <div>
+            <p><strong>Seller:</strong>
+              <a href="#" id="seller-link" style="text-decoration: underline; color: #007BFF;" target="_blank">
+                <span id="seller-name"></span>
+              </a>
+            </p>
+            <button onclick="messageSeller()">💬 Message</button>
+            <button onclick="orderNow()">🛒 Order Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2025 Ara Freelance. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const params = new URLSearchParams(window.location.search);
+    const gigId = params.get("id");
+
+    const gigs = JSON.parse(localStorage.getItem("gigs")) || [];
+    const gig = gigs.find(g => g.id === gigId);
+
+    if (!currentUser) {
+      alert("Please login to view gig details.");
+      window.location.href = "login.html";
+    }
+
+    if (gig) {
+      document.getElementById("gig-image").src = gig.image || "assets/images/default-gig.jpg";
+      document.getElementById("gig-title").textContent = gig.title;
+      document.getElementById("gig-category").textContent = gig.category;
+      document.getElementById("gig-price").textContent = gig.price;
+      document.getElementById("gig-delivery").textContent = gig.deliveryTime;
+      document.getElementById("gig-revisions").textContent = gig.revisions || "1";
+      document.getElementById("gig-description").textContent = gig.description;
+      document.getElementById("seller-name").textContent = gig.sellerName;
+      document.getElementById("seller-avatar").src = gig.sellerAvatar || "assets/images/default-user.png";
+      document.getElementById("seller-link").href = `seller-profile.html?id=${encodeURIComponent(gig.sellerId)}`;
+    } else {
+      document.querySelector(".gig-detail").innerHTML = "<p>Gig not found.</p>";
+    }
+
+    function messageSeller() {
+      if (!gig || !gig.sellerId) {
+        alert("Seller information missing.");
+        return;
+      }
+
+      const notifs = JSON.parse(localStorage.getItem("notifications")) || [];
+      notifs.push({
+        from: currentUser.email,
+        fromName: currentUser.fullname,
+        to: gig.sellerId,
+        time: new Date().toISOString(),
+        read: false,
+        message: `📩 ${currentUser.fullname} wants to chat with you about your gig "${gig.title}".`
+      });
+      localStorage.setItem("notifications", JSON.stringify(notifs));
+      window.location.href = `chat.html?with=${encodeURIComponent(gig.sellerId)}`;
+    }
+
+    function orderNow() {
+      if (!gig || !gig.id) {
+        alert("Cannot proceed to order. Gig not found.");
+        return;
+      }
+      window.location.href = `order.html?id=${encodeURIComponent(gig.id)}`;
+    }
+
+    const authLinks = document.getElementById("authLinks");
+    if (currentUser && currentUser.isLoggedIn) {
+      authLinks.innerHTML = `
+        <img src="${currentUser.avatar || 'assets/images/default-user.png'}"
+             alt="Avatar"
+             style="width:30px; height:30px; border-radius:50%; vertical-align:middle; margin-right:8px;">
+        <a href="profile.html">Profile</a>
+        <a href="#" onclick="logout()" style="color:red;">Logout</a>
+      `;
+    } else {
+      authLinks.innerHTML = `<a href="login.html">Login</a>`;
+    }
+
+    function logout() {
+      localStorage.removeItem("currentUser");
+      alert("Logged out");
+      location.href = "login.html";
+    }
+  </script>
+
+</body>
+</html>

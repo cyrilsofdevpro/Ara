@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ara - Your Cart</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">Ara</div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="store.html">Store</a></li>
+        <li><a href="login.html" class="btn">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="cart-section">
+    <h1>Your Cart</h1>
+    <div id="cart-container" class="store-grid"></div>
+    <button class="buy-btn" onclick="checkout()">Complete Purchase</button>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2025 Ara Freelance. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const cartContainer = document.getElementById("cart-container");
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    if (cart.length === 0) {
+      cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+    } else {
+      cartContainer.innerHTML = cart.map((item, index) => `
+        <div class="store-card">
+          <img src="${item.image}" alt="${item.title}">
+          <h4>${item.title}</h4>
+          <p>${item.price}</p>
+          <button onclick="removeFromCart(${index})">Remove</button>
+        </div>
+      `).join("");
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      location.reload();
+    }
+
+    function checkout() {
+      alert("🎉 Purchase successful!");
+      localStorage.removeItem("cart");
+      window.location.href = "downloads.html";
+    }
+  </script>
+
+</body>
+</html>

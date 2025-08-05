@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ara - Freelance & Digital Store</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/responsive.css" />
+
+  <style>
+    /* Slideshow styles */
+    .slideshow-container {
+      max-width: 100%;
+      position: relative;
+      margin: auto;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+
+    .slide {
+      display: none;
+    }
+
+    .slide img {
+      width: 100%;
+      height: auto;
+      vertical-align: middle;
+    }
+
+    .fade {
+      animation-name: fade;
+      animation-duration: 1s;
+    }
+
+    @keyframes fade {
+      from { opacity: 0.4 }
+      to { opacity: 1 }
+    }
+    .slideshow-hero {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+}
+
+.slideshow-container .slide {
+  display: none;
+  height: 400px;
+}
+
+.slideshow-container .slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #fff;
+  padding: 20px;
+}
+
+.hero-overlay h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.hero-overlay .search-bar {
+  padding: 10px 15px;
+  width: 90%;
+  max-width: 500px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+}
+
+.top-category-bar {
+  display: flex;
+  overflow-x: auto;
+  background: #f8f8f8;
+  padding: 12px 20px;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.top-category-bar a {
+  text-decoration: none;
+  margin-right: 20px;
+  color: #444;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.dashboard-welcome {
+  padding: 2rem;
+  background: #f5f7fa;
+  border-bottom: 1px solid #eee;
+}
+
+.dashboard-welcome h2 {
+  font-size: 22px;
+  margin-bottom: 1rem;
+}
+
+.recommendations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.rec-card {
+  flex: 1;
+  min-width: 220px;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+}
+
+
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+<header class="navbar">
+  <div class="logo">Ara</div>
+  
+  <!-- Hamburger Icon for Small Devices -->
+  <div class="menu-toggle" id="menuToggle">☰</div>
+
+  <!-- Navigation Menu -->
+  <nav>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="freelancers.html">Freelancers</a></li>
+      <li><a href="store.html">Store</a></li>
+      <li><a href="post-job.html">Post a Job</a></li>
+      <li><a href="messages.html">📩</a></li>
+      <li><a href="notifications.html" id="notificationLink">🔔 <span id="notificationCount">0</span></a></li>
+      <li id="authLinks"></li>
+    </ul>
+  </nav>
+</header>
+
+
+  <!-- Logged-in User Info -->
+  <section id="user-profile" style="display: none; padding: 1rem; background: #f5f5f5; border-bottom: 1px solid #ddd;">
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <img id="user-avatar" src="assets/images/default-user.png" style="width: 60px; height: 60px; border-radius: 50%;" />
+      <div>
+        <p><strong>Welcome,</strong> <span id="user-name"></span> (<span id="user-role"></span>)</p>
+        <div id="freelancer-tools" style="margin-top: 10px;">
+          <button onclick="window.location.href='post-gig.html'" class="btn">➕ Post a Gig</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- Hero with Slideshow Background -->
+<section class="slideshow-hero">
+  <div class="slideshow-container">
+    <div class="slide fade active">
+      <img src="assets/images/img 1.jpg" alt="Slide 1">
+    </div>
+    <div class="slide fade">
+      <img src="assets/images/img 2.jpg" alt="Slide 2">
+    </div>
+    <div class="slide fade">
+      <img src="assets/images/img 3.jpg" alt="Slide 3">
+    </div>
+  </div>
+
+  <div class="hero-overlay">
+    <h1>Find the perfect freelance service for your business</h1>
+    <input type="text" placeholder="Try 'Book Cover Design' or 'Article Writing'" class="search-bar">
+  </div>
+</section>
+
+<!-- Top Category Bar -->
+<div class="top-category-bar">
+  <a href="#">Trending 🔥</a>
+  <a href="#">Graphics & Design</a>
+  <a href="#">Programming & Tech</a>
+  <a href="#">Digital Marketing</a>
+  <a href="#">Writing & Translation</a>
+  <a href="#">Business</a>
+  <a href="#">Finance</a>
+  <a href="#">AI</a>
+  <a href="#">Writing & Translation</a>
+  <a href="#">Music & Audio</a>
+  <a href="#">Business</a>
+  <a href="#">Personal Geowth</a>
+  <a href="#">Consulting</a>
+  <a href="#">Photography</a>
+  <a href="#">Video & Animation</a>
+  <a href="#">Lifestyle</a>
+</div>
+
+<!-- Fiverr-like Welcome and Recommendations -->
+<section class="dashboard-welcome">
+  <h2>Welcome back, <span id="welcome-name">User</span></h2>
+  <div class="recommendations">
+    <div class="rec-card">
+      <h4>📋 Post a project brief</h4>
+      <p>Get tailored offers for your needs.</p>
+    </div>
+    <div class="rec-card">
+      <h4>📱 Download the Ara app</h4>
+      <p>Stay productive, anywhere you go.</p>
+    </div>
+    <div class="rec-card">
+      <h4>📊 You’ve added 35% of your profile</h4>
+      <p>Complete it to get tailored suggestions.</p>
+    </div>
+  </div>
+</section>
+
+
+
+  <!-- Categories Section -->
+  <section class="categories">
+    <h2>Popular Categories</h2>
+    <div class="category-grid">
+      <div class="category-card">✍️ Writers</div>
+      <div class="category-card">🎨 Graphic Designers</div>
+      <div class="category-card">📄 Content Writers</div>
+      <div class="category-card">📝 Copywriters</div>
+      <div class="category-card">📚 eBook Creators</div>
+    </div>
+  </section>
+
+  <!-- Explore Freelance Services Section (Gigs) -->
+  <section class="gig-preview">
+    <h2>Explore Freelance Services</h2>
+    <div id="homepageGigGrid" class="gig-grid"></div>
+    <div style="text-align: center; margin-top: 10px;">
+      <a href="services.html" class="btn">View More</a>
+    </div>
+  </section>
+
+  <!-- Featured Freelancers -->
+  <section class="freelancers">
+    <h2>Top Freelancers</h2>
+    <div class="freelancer-grid">
+      <div class="freelancer-card">
+        <img src="assets/images/user1.jpg" alt="User">
+        <h4>Jane Writer</h4>
+        <p>SEO Article Writer</p>
+        <button>Hire</button>
+      </div>
+      <div class="freelancer-card">
+        <img src="assets/images/user2.jpg" alt="User">
+        <h4>Mike Design</h4>
+        <p>Book Cover Designer</p>
+        <button>Hire</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Store Preview -->
+  <section class="store">
+    <h2>Digital Products</h2>
+    <div class="store-grid">
+      <div class="store-card">
+        <img src="assets/images/book1.jpg" alt="Book">
+        <h4>Start Your Freelance Journey - eBook</h4>
+        <p>$9.99</p>
+        <button>Buy Now</button>
+      </div>
+      <div class="store-card">
+        <img src="assets/images/template1.jpg" alt="Template">
+        <h4>Canva Resume Template</h4>
+        <p>$5.00</p>
+        <button>Buy Now</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 Ara Freelance. All rights reserved.</p>
+  </footer>
+
+  <!-- Gigs Loader Script (LocalStorage) -->
+  <script>
+
+      const currentUserNotif = JSON.parse(localStorage.getItem("currentUser"));
+  const notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+
+  function updateNotificationCount() {
+    if (!currentUserNotif || !currentUserNotif.fullname) return;
+    const userNotifs = notifications.filter(n => n.to === currentUserNotif.fullname && !n.read);
+    document.getElementById("notificationCount").textContent = userNotifs.length;
+  }
+
+  updateNotificationCount();
+    const homepageGigs = JSON.parse(localStorage.getItem("gigs")) || [];
+    const homepageGigGrid = document.getElementById("homepageGigGrid");
+
+    function showHomepageGigs() {
+      homepageGigGrid.innerHTML = "";
+      const sliced = homepageGigs.slice(0, 4);
+
+      if (sliced.length === 0) {
+        homepageGigGrid.innerHTML = "<p>No gigs yet. Check back later.</p>";
+        return;
+      }
+
+      sliced.forEach(gig => {
+        homepageGigGrid.innerHTML += `
+          <div class="gig-card">
+            <img src="${gig.image || 'assets/images/default-gig.jpg'}" alt="Gig Image" />
+            <h3>${gig.title}</h3>
+            <p>${gig.category} • ${gig.deliveryTime} day(s)</p>
+            <p><strong>$${gig.price}</strong></p>
+            <div class="seller-info">
+              <img src="${gig.sellerAvatar || 'assets/images/default-user.png'}" alt="Seller" />
+              <span>${gig.sellerName}</span>
+            </div>
+            <a href="gig.html?id=${gig.id}" class="btn">View</a>
+          </div>
+        `;
+      });
+    }
+
+    showHomepageGigs();
+  </script>
+
+  <!-- Slideshow Script -->
+  <script>
+    let slideIndex = 0;
+    showSlides();
+
+    function showSlides() {
+      const slides = document.getElementsByClassName("slide");
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      slideIndex++;
+      if (slideIndex > slides.length) { slideIndex = 1 }
+      slides[slideIndex - 1].style.display = "block";
+      setTimeout(showSlides, 4000); // Change every 4 seconds
+    }
+  </script>
+
+  <!-- Auth Logic -->
+  <script>
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const authLinks = document.getElementById("authLinks");
+    const userProfile = document.getElementById("user-profile");
+    const userName = document.getElementById("user-name");
+    const userRole = document.getElementById("user-role");
+    const userAvatar = document.getElementById("user-avatar");
+    const freelancerTools = document.getElementById("freelancer-tools");
+
+    if (currentUser && currentUser.isLoggedIn) {
+      userProfile.style.display = "block";
+      userName.textContent = currentUser.fullname;
+      userRole.textContent = currentUser.userType;
+      userAvatar.src = currentUser.avatar || "assets/images/default-user.png";
+
+      if (currentUser.userType !== "freelancer") {
+        freelancerTools.style.display = "none";
+      }
+
+      authLinks.innerHTML = `
+        <img src="${currentUser.avatar || 'assets/images/default-user.png'}" 
+             alt="Avatar" 
+             style="width:30px; height:30px; border-radius:50%; vertical-align:middle; margin-right:8px;">
+        <a href="profile.html" style="margin-right:10px;">Profile</a>
+        <a href="#" onclick="logout()" style="color:red;">Logout</a>
+      `;
+    } else {
+      authLinks.innerHTML = `<a href="login.html" class="btn">Login</a>`;
+    }
+
+    function logout() {
+      localStorage.removeItem("currentUser");
+      alert("Logged out");
+      location.reload();
+    }
+
+    if (currentUser.userType === "freelancer") {
+  document.getElementById("authLinks").innerHTML += `
+    <a href="upload-portfolio.html">📂 My Portfolio</a>
+  `;
+}
+
+  const currentUserName = JSON.parse(localStorage.getItem("currentUser"))?.fullname;
+  document.getElementById("welcome-name").textContent = currentUserName || "Guest";
+
+    const menuToggle = document.getElementById("menuToggle");
+  const navLinks = document.getElementById("navLinks");
+
+  menuToggle.addEventListener("click", () => {
+    navLinks.classList.toggle("active");
+  });
+  </script>
+
+</body>
+</html>
+

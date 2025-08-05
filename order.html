@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Place Order – Ara</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="logo">Ara</div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="store.html">Store</a></li>
+        <li><a href="profile.html">Profile</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Order Section -->
+  <section class="form-section">
+    <h1>Confirm Your Order</h1>
+    <div id="orderBox">
+      <p><strong>Gig:</strong> <span id="gigTitle">Loading...</span></p>
+      <p><strong>Price:</strong> $<span id="gigPrice"></span></p>
+      <p><strong>Delivery Time:</strong> <span id="gigDelivery"></span> day(s)</p>
+      <p><strong>Seller:</strong> <span id="sellerName"></span></p>
+      <p><strong>Your Email:</strong> <span id="buyerEmail"></span></p>
+      <button onclick="placeOrder()">✅ Place Order</button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2025 Ara Freelance. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const gigId = params.get("id");
+    const gigs = JSON.parse(localStorage.getItem("gigs")) || [];
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    const gig = gigs.find(g => g.id === gigId);
+
+    if (!currentUser || !currentUser.isLoggedIn) {
+      alert("Please login to place an order.");
+      window.location.href = "login.html";
+    }
+
+    if (gig) {
+      document.getElementById("gigTitle").textContent = gig.title;
+      document.getElementById("gigPrice").textContent = gig.price;
+      document.getElementById("gigDelivery").textContent = gig.deliveryTime;
+      document.getElementById("sellerName").textContent = gig.sellerName;
+      document.getElementById("buyerEmail").textContent = currentUser.email;
+    } else {
+      document.getElementById("orderBox").innerHTML = "<p>Gig not found.</p>";
+    }
+
+    function placeOrder() {
+      const orders = JSON.parse(localStorage.getItem("orders")) || [];
+
+      const newOrder = {
+        id: Date.now().toString(),
+        gigId: gig.id,
+        gigTitle: gig.title,
+        price: gig.price,
+        deliveryTime: gig.deliveryTime,
+        buyerName: currentUser.fullname,
+        buyerEmail: currentUser.email,
+        sellerName: gig.sellerName,
+        sellerEmail: gig.sellerId,
+        status: "Pending",
+        createdAt: new Date().toLocaleString()
+      };
+
+      orders.push(newOrder);
+      localStorage.setItem("orders", JSON.stringify(orders));
+
+      alert("✅ Order placed successfully!");
+      window.location.href = "profile.html"; // or create orders.html if needed
+    }
+  </script>
+
+</body>
+</html>

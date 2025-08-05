@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notifications – Ara</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    header.navbar {
+      background: #222;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header .logo {
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+
+    .message-card {
+      border-bottom: 1px solid #ddd;
+      padding: 15px 0;
+    }
+
+    .message-card p {
+      margin: 5px 0;
+    }
+
+    .message-card small {
+      color: #555;
+    }
+
+    .message-card button {
+      background: #007bff;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    .message-card button:hover {
+      background: #0056b3;
+    }
+
+    .no-msg {
+      text-align: center;
+      color: #777;
+      padding: 30px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">Ara</div>
+    <nav>
+      <a href="index.html" style="color: white; margin-right: 15px;">Home</a>
+      <a href="profile.html" style="color: white;">Profile</a>
+    </nav>
+  </header>
+
+  <!-- Notifications -->
+  <div class="container">
+    <h2>Your Notifications</h2>
+    <div id="notificationsList"></div>
+  </div>
+
+  <script>
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const allNotifications = JSON.parse(localStorage.getItem("notifications")) || [];
+    const container = document.getElementById("notificationsList");
+
+    if (!currentUser) {
+      container.innerHTML = '<p class="no-msg">Please <a href="login.html">log in</a> to view messages.</p>';
+    } else {
+      // Get notifications sent to current user
+      let userNotifications = allNotifications.filter(n => n.to === currentUser.email);
+
+      if (userNotifications.length === 0) {
+        container.innerHTML = "<p class='no-msg'>No notifications yet.</p>";
+      } else {
+        userNotifications.reverse().forEach(n => {
+          container.innerHTML += `
+            <div class="message-card">
+              <p><strong>From:</strong> ${n.fromName}</p>
+              <p>${n.message}</p>
+              <small>${new Date(n.time).toLocaleString()}</small><br>
+              <button onclick="replyTo('${n.from}', '${n.fromName}')">Reply</button>
+            </div>
+          `;
+        });
+
+        // Mark all as read
+        const updated = allNotifications.map(n => {
+          if (n.to === currentUser.email) return { ...n, read: true };
+          return n;
+        });
+        localStorage.setItem("notifications", JSON.stringify(updated));
+      }
+    }
+
+    function replyTo(toEmail, toName) {
+      const reply = prompt(`Reply to ${toName}:`);
+      if (!reply) return;
+
+      const notifications = JSON.parse(localStorage.getItem("notifications")) || [];
+      notifications.push({
+        from: currentUser.email,
+        fromName: currentUser.fullname,
+        to: toEmail,
+        time: new Date().toISOString(),
+        read: false,
+        message: reply
+      });
+
+      localStorage.setItem("notifications", JSON.stringify(notifications));
+      alert("Reply sent!");
+      location.reload();
+    }
+  </script>
+</body>
+</html>

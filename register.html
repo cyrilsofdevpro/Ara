@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register – Ara</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+    }
+
+    .form-section {
+      max-width: 400px;
+      margin: 60px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .form-section h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 22px;
+      color: #333;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .form-section p {
+      text-align: center;
+    }
+
+    #adminOption {
+      display: none; /* Hide Admin option by default */
+    }
+
+    @media (max-width: 500px) {
+      .form-section {
+        margin: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="form-section">
+    <h1>Create Your Account</h1>
+    <form id="registerForm">
+      <input type="text" id="fullname" placeholder="Full Name" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+
+      <select id="userType" required>
+        <option value="">I'm signing up as...</option>
+        <option value="freelancer">Freelancer</option>
+        <option value="buyer">Buyer</option>
+        <option value="admin" id="adminOption">Admin</option>
+      </select>
+
+      <label style="margin: 10px 0 5px; display:block;">Upload Avatar (optional)</label>
+      <input type="file" id="avatar" accept="image/*" />
+
+      <button type="submit">Register</button>
+    </form>
+    <p>Already have an account? <a href="login.html">Login</a></p>
+  </section>
+
+  <script>
+    const form = document.getElementById('registerForm');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const fullname = document.getElementById('fullname').value.trim();
+      const email = document.getElementById('email').value.trim().toLowerCase();
+      const password = document.getElementById('password').value;
+      const userType = document.getElementById('userType').value;
+      const avatarInput = document.getElementById('avatar');
+
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const allUsers = JSON.parse(localStorage.getItem('allUsers')) || [];
+
+      // Check if email already exists
+      if (users.some(u => u.email === email)) {
+        alert("Email already registered!");
+        return;
+      }
+
+      const newUser = {
+        fullname,
+        email,
+        password,
+        userType,
+        isLoggedIn: true,
+        avatar: ""
+      };
+
+      if (avatarInput.files.length > 0) {
+        const reader = new FileReader();
+        reader.onload = function () {
+          newUser.avatar = reader.result;
+          saveUser(newUser);
+        };
+        reader.readAsDataURL(avatarInput.files[0]);
+      } else {
+        saveUser(newUser);
+      }
+    });
+
+    function saveUser(user) {
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+      const allUsers = JSON.parse(localStorage.getItem('allUsers')) || [];
+
+      users.push(user);
+      localStorage.setItem('users', JSON.stringify(users));
+      localStorage.setItem('currentUser', JSON.stringify(user));
+
+      if (!allUsers.some(u => u.email === user.email)) {
+        allUsers.push({ email: user.email, fullname: user.fullname });
+        localStorage.setItem('allUsers', JSON.stringify(allUsers));
+      }
+
+      alert(`Welcome to Ara, ${user.fullname}!`);
+      window.location.href = "index.html";
+    }
+
+    // ✅ Uncomment this line below to show the Admin option when needed
+    // document.getElementById("adminOption").style.display = "block";
+  </script>
+
+</body>
+</html>

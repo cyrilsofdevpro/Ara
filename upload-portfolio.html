@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Upload Portfolio – Ara</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    form input, form textarea, form select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    form button {
+      width: 100%;
+      background: #4CAF50;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Upload Portfolio Item</h2>
+    <form id="portfolioForm">
+      <input type="text" id="title" placeholder="Title" required />
+      <textarea id="description" placeholder="Description" required></textarea>
+      <input type="text" id="tags" placeholder="Tags (comma separated)" />
+      <input type="text" id="category" placeholder="Category" required />
+      <input type="file" id="file" accept="image/*,video/*,.pdf,.doc,.docx" required />
+
+      <label for="visibility">Visibility:</label>
+      <select id="visibility" required>
+        <option value="public">Public</option>
+        <option value="private">Private</option>
+      </select>
+
+      <button type="submit">Upload</button>
+    </form>
+  </div>
+
+  <script>
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const form = document.getElementById("portfolioForm");
+
+    if (!currentUser || currentUser.userType !== "freelancer") {
+      alert("Only freelancers can upload portfolios. Please log in as a freelancer.");
+      window.location.href = "login.html";
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const title = document.getElementById("title").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const tags = document.getElementById("tags").value.trim().split(",");
+      const category = document.getElementById("category").value.trim();
+      const fileInput = document.getElementById("file");
+      const visibility = document.getElementById("visibility").value;
+
+      if (!fileInput.files.length) {
+        alert("Please select a file.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function () {
+        const portfolioItem = {
+          id: Date.now(),
+          owner: currentUser.email,
+          title,
+          description,
+          tags,
+          category,
+          file: reader.result, // base64 data
+          visibility,
+          createdAt: new Date().toISOString()
+        };
+
+        const allItems = JSON.parse(localStorage.getItem("portfolios")) || [];
+        allItems.push(portfolioItem);
+        localStorage.setItem("portfolios", JSON.stringify(allItems));
+
+        alert("Portfolio uploaded successfully!");
+        window.location.href = "seller-profile.html?id=" + encodeURIComponent(currentUser.email);
+      };
+      reader.readAsDataURL(fileInput.files[0]);
+    });
+  </script>
+</body>
+</html>

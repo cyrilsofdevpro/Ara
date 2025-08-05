@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Discover – Ara</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+    }
+
+    header.navbar {
+      background: #222;
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 22px;
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .portfolio-card {
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .portfolio-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .portfolio-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .portfolio-content {
+      padding: 15px;
+    }
+
+    .portfolio-content h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .portfolio-content p {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .tags {
+      margin-top: 10px;
+    }
+
+    .tags span {
+      background: #eee;
+      padding: 3px 8px;
+      margin: 2px;
+      display: inline-block;
+      font-size: 12px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="logo">Ara</div>
+    <nav>
+      <a href="index.html" style="color:white; margin-right: 15px;">Home</a>
+      <a href="upload-portfolio.html" style="color:white;">My Portfolio</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2 style="text-align:center; margin-top:30px;">🔍 Explore Freelance Portfolios</h2>
+    <div id="portfolioGrid" class="portfolio-grid"></div>
+  </main>
+
+  <script>
+    const portfolios = JSON.parse(localStorage.getItem("portfolios")) || [];
+
+    const grid = document.getElementById("portfolioGrid");
+
+    if (portfolios.length === 0) {
+      grid.innerHTML = "<p style='text-align:center;'>No portfolios uploaded yet.</p>";
+    } else {
+      portfolios.reverse().forEach(port => {
+        if (port.visibility === "public") {
+          grid.innerHTML += `
+            <div class="portfolio-card">
+              <img src="${port.fileUrl}" alt="${port.title}">
+              <div class="portfolio-content">
+                <h3>${port.title}</h3>
+                <p>${port.description}</p>
+                <div class="tags">
+                  ${port.tags.split(",").map(tag => `<span>${tag.trim()}</span>`).join("")}
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

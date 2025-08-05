@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Profile – Ara</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <section class="profile-section">
+    <h1>Your Profile</h1>
+    <div id="profileBox" class="profile-box"></div>
+    <button onclick="logout()" class="logout-btn">Logout</button>
+  </section>
+
+  <script>
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    if (!currentUser || !currentUser.isLoggedIn) {
+      window.location.href = "login.html";
+    }
+
+    const profileBox = document.getElementById("profileBox");
+
+    profileBox.innerHTML = `
+      <img src="${currentUser.avatar || 'assets/images/default-user.png'}" 
+           alt="Avatar" 
+           style="width:100px; height:100px; border-radius:50%; margin-bottom:15px;">
+      <p><strong>Name:</strong> ${currentUser.fullname}</p>
+      <p><strong>Email:</strong> ${currentUser.email}</p>
+      <p><strong>Account Type:</strong> ${currentUser.userType}</p>
+    `;
+
+    function logout() {
+      localStorage.removeItem("currentUser");
+      alert("Logged out");
+      window.location.href = "login.html";
+    }
+  </script>
+
+</body>
+</html>

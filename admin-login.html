@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Admin Login – Ara</title>
+  <style>
+    body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f5f5f5; }
+    .login-form { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 300px; }
+    .login-form input, .login-form button { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #ccc; }
+    .login-form button { background: #007bff; color: #fff; border: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="login-form">
+    <h2>Admin Login</h2>
+    <input id="email" type="email" placeholder="Email" required />
+    <input id="password" type="password" placeholder="Password" required />
+    <button onclick="doLogin()">Login</button>
+    <p id="err" style="color:red;"></p>
+  </div>
+  <script>
+    function doLogin(){
+      const email = document.getElementById('email').value.trim().toLowerCase();
+      const password = document.getElementById('password').value;
+      const users = JSON.parse(localStorage.getItem("users"))||[];
+      const u = users.find(u=>u.email===email && u.password===password && u.userType==="admin");
+      if(u){ localStorage.setItem("currentUser", JSON.stringify(u)); window.location.href="admin-dashboard.html";}
+      else document.getElementById("err").textContent = "Invalid admin credentials";
+    }
+  </script>
+</body>
+</html>

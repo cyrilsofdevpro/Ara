@@ -18,6 +18,21 @@
   </section>
 
   <script>
+    // 🛡️ Create default admin if no user exists
+    const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
+
+    if (existingUsers.length === 0) {
+      const defaultAdmin = {
+        fullname: "Admin",
+        email: "admin@ara.com",
+        password: "admin123", // 🛑 Don't use weak passwords in production
+        userType: "admin",
+        avatar: "assets/images/default-user.png",
+        isLoggedIn: false
+      };
+      localStorage.setItem("users", JSON.stringify([defaultAdmin]));
+    }
+
     const loginForm = document.getElementById('loginForm');
 
     loginForm.addEventListener('submit', function (e) {
